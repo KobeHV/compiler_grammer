@@ -1,5 +1,6 @@
 //
 // Created by kobe on 2019/4/19.
+//珍爱生命，请原理c++14
 //
 
 #include "LR1.h"
@@ -54,19 +55,19 @@ bool isVn(string &str) {
     return false;
 }
 
-//string Prod::all_str() {
-////    string str = noTerminal;
-////    for(int i=0;i<right.size();i++){
-////        str+=" "+right[i];
-////    }
-////    set<string>::iterator iter;
-////    for(iter=additionalVt.begin();
-////        iter!=additionalVt.end();iter++){
-////        str += " "+*iter;
-////    }
-////    return str;
-//    return NULL;
-//}
+string Prod::all_str() {
+    string str = noTerminal;
+    str += " ->";
+    for(int i=0;i<right.size();i++){
+        str+=" "+right[i];
+    }
+    set<string>::iterator iter;
+    for(iter=additionalVt.begin();
+        iter!=additionalVt.end();iter++){
+        str += " , "+*iter;
+    }
+    return str;
+}
 Prod::Prod(string &in) {
     if (in.size() == 0) return;
     string str;
@@ -149,8 +150,8 @@ void LR::parser() {
             inStr.pop_back();
         } else if (act.first == REDUCE) {
             Prod p = G.prods[act.second];//要规约的表达式
-//            string string1 = p.all_str();
-//            cout << "REDUCE: " + string1 << endl;
+            string string1 = p.all_str();
+            cout << "REDUCE: " + string1 << endl;
             if (p.right.size() != 0) { // 空串，无需出栈，直接规约
                 for (int i = 0; i < p.right.size(); i++) {
                     status.pop_back();
@@ -194,13 +195,15 @@ Item LR::closure(Item &I) {
                     if (G.prods[k].noTerminal == B) {
                         Prod p = G.prods[k];
                         p.right.insert(p.right.begin(), ".");
+                        set<string> first;//到外边来声明，最后一起加给p的展望符
                         for (set<string>::iterator it = prod.additionalVt.begin();
                              it != prod.additionalVt.end(); it++) {
                             string str_first = beta + *it;//first(βa)
-                            set<string> first = LR::first(str_first);
-                            p.additionalVt = first;
-                            I.prods.push_back(p);
+                            set<string> first1 = LR::first(str_first);
+                            first.insert(first1.begin(),first1.end());
                         }
+                        p.additionalVt = first;
+                        I.prods.push_back(p);
                     }
                 }
             }
@@ -222,6 +225,7 @@ Item LR::Goto(Item &I, string X) {
                 prod.right[j] = prod.right[j + 1];
                 prod.right[j + 1] = ".";
                 J.add(prod);
+                break;
             }
         }
     }
@@ -239,6 +243,7 @@ void LR::items() {// 加载项目集
     C.push_back(item); // 置C初值
     //???随时更新，不知道循环有没有问题
     for (int i = 0; i < C.size(); ++i) { // C的每个项目集
+        int len1 = C.size();
         Item I = C[i];
         int len = sizeof(str_all)/ sizeof(str_all[0]);
         for (int j=0;j<len;j++) {
@@ -261,30 +266,44 @@ void LR::build() { // 构造Action、GOTO表
 
     for (int i = 0; i < C.size(); ++i) { // 逐个项目集
         Item item = C[i];
+        //GOTO
+        int length = sizeof(str_all)/ sizeof(str_all[0]);
+        for (int j = 0; j < length; j++) {
+            Item goto_item = Goto(item,str_all[j]);
+            string X = str_all[j];
+            for(int m=0;m<C.size();m++){
+                if(goto_item==C[m]){
+                    GOTO[make_pair(i,str_all[j])] = m;
+                    break;
+                }
+            }
+        }
+    }
+    for (int i = 0; i < C.size(); ++i) { // 逐个项目集
+        Item item = C[i];
         //Action
-//        cout << "Action..." << endl;
         for (int k = 0; k < item.prods.size(); k++) { // 逐个项目
             Prod prod = item.prods[k];
             for (int j = 0; j < prod.right.size(); j++) {
                 if (prod.right[j] == "." && j < prod.right.size() - 1) {//A->α.aβ,b
                     string a = prod.right[j + 1];
                     if (isVt(a)) { // 终结符
-                        int j = GOTO[make_pair(i, a)];
-                        ACTION[make_pair(i, a)] = make_pair(SHIFT, j);
+                        int goto_index = GOTO[make_pair(i, a)];
+                        ACTION[make_pair(i, a)] = make_pair(SHIFT, goto_index);
                     }
                 } else if (prod.right[j] == "." && j == prod.right.size() - 1
                            && prod.noTerminal != "^") {//A->α.,a
                     vector<Prod> g_prods = G.prods;
-                    int m = 0;
-                    for (m = 0; m < g_prods.size(); m++) {
-                        if (prod == g_prods[m]) {
-                            break;
-                        }
-                    }
                     for (set<string>::iterator it = prod.additionalVt.begin();
                          it != prod.additionalVt.end(); it++) {
                         string a = *it;
-                        ACTION[make_pair(i, a)] = make_pair(REDUCE, m);
+                        int m = 0;
+                        for (m = 0; m < g_prods.size(); m++) {
+                            if (prod.noTerminal == g_prods[m].noTerminal
+                                && prod.right == g_prods[m].right) {
+                                ACTION[make_pair(i, a)] = make_pair(REDUCE, m);
+                            }
+                        }
                     }
                 } else if (prod.right[j] == "." && j == prod.right.size() - 1
                            && prod.noTerminal == "^") {//A->α.,a
@@ -292,17 +311,7 @@ void LR::build() { // 构造Action、GOTO表
                 }
             }
         }
-        //GOTO
-//        cout << "GOTO..." << endl;
-        for (int j = 0; j < strVn->size(); j++) {
-            string X = strVn[j];
-            Item goto_item = Goto(item, X);
-            int k = 0;
-            for (k = 0; k < C.size(); k++) {
-                if (goto_item == C[k]) break;
-            }
-            GOTO[make_pair(i, X)] = k;
-        }
+
     }
     cout << "build...end" << endl;
     return;
@@ -365,13 +374,8 @@ void LR::printC() {
         cout << "Item[" << i << "]:" << endl;
         for (int j = 0; j < item.prods.size(); j++) {
             Prod prod = item.prods[j];
-//            string string1 = prod.all_str();
-//            cout << string1;
-
-            set<string>::iterator it;
-            for (it = prod.additionalVt.begin(); it != prod.additionalVt.end(); it++) {
-                cout << " , " + *it;
-            }
+            string string1 = prod.all_str();
+            cout << string1;
             cout << endl;
         }
         cout << endl;
@@ -381,26 +385,26 @@ void LR::printC() {
 
 void LR::run(fstream &file) {
     cout << "run..." << endl;
-    vector<string> in;
-    string str;
-    file >> noskipws;//not ignore space
-    if (!file.is_open()) {
-        cout << "Could not find the file" << endl;
-        exit(EXIT_FAILURE);
-    }
-    while (!file.eof()) {
-        getline(file, str);
+//    vector<string> in;
+//    string str;
+//    file >> noskipws;//not ignore space
+//    if (!file.is_open()) {
+//        cout << "Could not find the file" << endl;
+//        exit(EXIT_FAILURE);
+//    }
+//    while (!file.eof()) {
+//        getline(file, str);
 //        cout << str << endl;
-        in.push_back(str);
-    }
-    file.close();
+//        in.push_back(str);
+//    }
+//    file.close();
 
     LR::addG();
-//    LR::build();
+    LR::build();
 //    //LR::loadStr(in[0]);
 //    //LR::parser();
-//    LR::printTable();
-//    LR::printC();
+    LR::printTable();
+    LR::printC();
 }
 
 

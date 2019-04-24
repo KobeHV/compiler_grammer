@@ -25,14 +25,26 @@ public:
     //重载 “==” 操作符，函数最后的 const 别忘了，否则会报错
     //如果vector中保存的是自定义类型（结构体/类），则需要为该类型重载==操作符。再用find
     bool operator==(const Prod &p) const {
-        if (this->noTerminal == p.noTerminal && this->right == p.right) {
-            return true;// ? additionalVt
+
+        if (!(this->noTerminal == p.noTerminal && this->right == p.right)) {
+            return false;
         }
-        return false;
+        // additionalVt别忘了比较展望符
+        set<string>::iterator iter1;
+        set<string>::iterator iter2;
+        for (iter1 = this->additionalVt.begin(), iter2 = p.additionalVt.begin();
+             iter1 != this->additionalVt.end() && iter2 != p.additionalVt.end();
+             iter1++, iter2++) {
+            if (*iter1 != *iter2) {
+                return false;
+            }
+        }
+        return true;
     }
 
     Prod(string &in);
-//    string all_str();
+
+    string all_str();
 };
 
 class Item { // 项目集,代表某一个状态
@@ -45,6 +57,7 @@ public:
     }
 
     void add(string &prod);
+
     void add(Prod &prod);
 };
 
@@ -59,9 +72,9 @@ public:
     static string actionStatStr[];
 
     vector<Item> C; // 项目集规范族
-    map< pair<int, string>, int > GOTO; // goto数组，项目集<int, int>=char
-    map< pair<int, string>, pair<actionStat, int> > ACTION; // Action数组，Action[(i, a)]=(s|r)j
-    map< string, set<string> > FIRST; // first集
+    map<pair<int, string>, int> GOTO; // goto数组，项目集<int, int>=char
+    map<pair<int, string>, pair<actionStat, int> > ACTION; // Action数组，Action[(i, a)]=(s|r)j
+    map<string, set<string> > FIRST; // first集
     set<string> first(string &str); // 求first集
     vector<string> inStr; // 输入串/栈
     vector<int> status; // 状态栈
@@ -77,6 +90,7 @@ public:
     void loadStr(string &in); // 读取输入串
     void parser(); // LR(1)分析
     void run(fstream &file);
+
     void printTable();
     void printC();
 };
