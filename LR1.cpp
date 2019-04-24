@@ -293,6 +293,7 @@ void LR::build() { // 构造Action、GOTO表
                     }
                 } else if (prod.right[j] == "." && j == prod.right.size() - 1
                            && prod.noTerminal != "^") {//A->α.,a
+                    prod.right.erase(prod.right.end());//去掉最后的 . ,否则在后边的G文法项目比较的时候找不到相等的
                     vector<Prod> g_prods = G.prods;
                     for (set<string>::iterator it = prod.additionalVt.begin();
                          it != prod.additionalVt.end(); it++) {

@@ -12,13 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed6c3307-3eda-4100-acad-cc2b1ced8bd1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LR1.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LR1.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LR1.h" beforeDir="false" afterPath="$PROJECT_DIR$/LR1.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/LR1.dir/LR1.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/LR1.dir/LR1.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/LR1.dir/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/LR1.dir/main.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/LR1.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/LR1.dir/objects.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/LR1.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/LR1.exe" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,8 +30,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LR1.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="283" column="16" selection-start-line="283" selection-start-column="16" selection-end-line="283" selection-end-column="16" />
+            <state relative-caret-position="74">
+              <caret line="295" column="55" selection-start-line="295" selection-start-column="55" selection-end-line="295" selection-end-column="55" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/G.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="3" column="6" lean-forward="true" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -76,7 +79,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-7" />
     <option name="width" value="755" />
     <option name="height" value="735" />
@@ -138,30 +141,30 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1556114045433</updated>
-      <workItem from="1556114049473" duration="7710000" />
+      <workItem from="1556114049473" duration="8208000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7710000" />
+    <option name="totallyTimeSpent" value="8208000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.51307845" weight="0.40031397" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.51307845" weight="0.4" />
       <window_info id="Structure" order="1" sideWeight="0.48692152" side_tool="true" weight="0.276259" />
       <window_info id="Favorites" order="2" sideWeight="0.824295" side_tool="true" weight="0.17700455" />
       <window_info anchor="bottom" id="CMake" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Messages" sideWeight="0.49924356" weight="0.81364393" />
+      <window_info anchor="bottom" id="Messages" sideWeight="0.49924356" weight="0.81198" />
       <window_info anchor="bottom" id="Terminal" />
       <window_info anchor="bottom" id="Event Log" sideWeight="0.5015129" side_tool="true" weight="0.36557376" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.09650582" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49848714" visible="true" weight="0.04918033" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.25956738" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49848714" visible="true" weight="0.39836067" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -206,10 +209,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/G.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="3" column="6" lean-forward="true" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/LR1.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="283" column="16" selection-start-line="283" selection-start-column="16" selection-end-line="283" selection-end-column="16" />
+        <state relative-caret-position="74">
+          <caret line="295" column="55" selection-start-line="295" selection-start-column="55" selection-end-line="295" selection-end-column="55" />
         </state>
       </provider>
     </entry>
