@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Code/C/clion/LR1/LR1.cpp
+LR1.h
+C:/Code/C/clion/LR1/LR1.h
+
+C:/Code/C/clion/LR1/LR1.h
+iostream
+-
+fstream
+-
+ctype.h
+-
+vector
+-
+string
+-
+algorithm
+-
+map
+-
+set
+-
+sstream
+-
+

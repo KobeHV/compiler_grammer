@@ -1,0 +1,33 @@
+^ -> S
+D -> P id ;
+D -> bool boolid ;
+P -> int
+P -> float
+A -> id = E ;
+E -> T + E
+E -> T
+T -> num * T
+T -> id * T
+T -> ( E ) * T
+T -> ( E )
+T -> num
+T -> id
+C -> if ( B ) then { S } else { S }
+L -> do { S } while ( B ) ;
+B -> E R E
+B -> ! B
+B -> E R E && B
+B -> E R E || B
+B -> boolid
+B -> true
+B -> false
+R -> ==
+R -> !=
+S -> S D
+S -> S A
+S -> S C
+S -> S L
+S -> D
+S -> A
+S -> C
+S -> L
