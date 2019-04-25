@@ -88,7 +88,7 @@ public:
     void build(); // 构造Action、GOTO表
 
     void loadStr(string &in); // 读取输入串
-    void parser(); // LR(1)分析
+    void parser(string &string); // LR(1)分析
     void run(fstream &file);
 
     void printTable();

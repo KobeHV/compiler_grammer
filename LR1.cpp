@@ -10,14 +10,16 @@ string LR::actionStatStr[] = {
         "s",
         "r"
 };
-string strVn[] = {"^", "S", "P", "E", "T", "B", "R", "D", "A", "C", "L"};
+string strVn[] = {"^", "S", "P", "E", "T", "B", "R", "D", "A", "C", "L", "N"};
 string strVt[] = {"#", "id", "boolid", "int", "float", "bool", "=", "+", "*",
-                  "(", ")", "num", "if", "then", "else", "{", "}", "do",
-                  "while", ";", "!", "&&", "||", "true", "false", "==", "!="};
-string str_all[] = {"#", "^", "S", "P", "E", "T", "B", "R", "D", "A", "C", "L",
-                    "id", "boolid", "int", "float", "bool", "=", "+", "*",
-                    "(", ")", "num", "if", "then", "else", "{", "}", "do",
-                    "while", ";", "!", "&&", "||", "true", "false", "==", "!="};
+                  "(", ")", "if", "then", "else", "{", "}", "do",
+                  "while", ";", "!", "&&", "||", "true", "false",
+                  "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
+string str_all[] = {"^", "S", "P", "E", "T", "B", "R", "D", "A", "C", "L", "N",
+                    "#", "id", "boolid", "int", "float", "bool", "=", "+", "*",
+                    "(", ")", "if", "then", "else", "{", "}", "do",
+                    "while", ";", "!", "&&", "||", "true", "false",
+                    "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
 //string strVn[] = {"^", "S", "C"};
 //string strVt[] = {"c", "d", "#"};
 //string str_all[] = {"^", "S", "C", "c", "d", "#"};
@@ -28,7 +30,6 @@ void _split(string &s, char delim, vector<string> &elems) {
     while (getline(ss, item, delim)) {
         elems.push_back(item);
     }
-    return;
 }
 
 vector<string> split(string &s, char delim) {
@@ -116,25 +117,24 @@ void LR::addG() { //加载文法
     }
     while (!file.eof()) {
         getline(file, str);
-        cout << str << endl;
+//        cout << str << endl;
         G.add(str);
     }
     file.close();
 }
 
 void LR::loadStr(string &in) {
-    cout << "loadStr..." << endl;
+//    cout << "loadStr..." << endl;
     vector<std::string> s = split(in, ' ');
     inStr.push_back("#");
     status.push_back(0);
     for (int i = s.size() - 1; i >= 0; --i) {
         inStr.push_back(s[i]);
     }
-    return;
 }
 
-void LR::parser() {
-    cout << "parse..." << endl;
+void LR::parser(string &str) {
+    cout << endl << "************parse..." << str << "*************" << endl;
 
     bool success = false;
     int step = 0;
@@ -177,7 +177,6 @@ void LR::parser() {
     if (!success) {
         cout << "parse error!" << endl;
     }
-    return;
 }
 
 Item LR::closure(Item &I) {
@@ -322,7 +321,6 @@ void LR::build() { // 构造Action、GOTO表
 
     }
     cout << "build...end" << endl;
-    return;
 }
 
 set<string> LR::first(string &str) { // s不为产生式
@@ -391,31 +389,32 @@ void LR::printC() {
         }
         cout << endl;
     }
-    return;
 }
 
 void LR::run(fstream &file) {
     cout << "run..." << endl;
-//    vector<string> in;
-//    string str;
-//    file >> noskipws;//not ignore space
-//    if (!file.is_open()) {
-//        cout << "Could not find the file" << endl;
-//        exit(EXIT_FAILURE);
-//    }
-//    while (!file.eof()) {
-//        getline(file, str);
-//        cout << str << endl;
-//        in.push_back(str);
-//    }
-//    file.close();
+    vector<string> in;
+    string str;
+    file >> noskipws;//not ignore space
+    if (!file.is_open()) {
+        cout << "Could not find the file" << endl;
+        exit(EXIT_FAILURE);
+    }
+    while (!file.eof()) {
+        getline(file, str);
+        cout << str << endl;
+        in.push_back(str);
+    }
+    file.close();
 
     LR::addG();
     LR::build();
-//    //LR::loadStr(in[0]);
-//    //LR::parser();
-    LR::printTable();
-    LR::printC();
+    for (int i = 0; i < in.size(); i++) {
+        LR::loadStr(in[i]);
+        LR::parser(in[i]);
+    }
+//    LR::printTable();
+//    LR::printC();
 }
 
 

@@ -1,1 +1,6 @@
-int i = 1 ;
+int id ;
+id = iConst ;
+id = fConst ;
+id = id + id ;
+if ( id == id ) then { id = id + id ; } else { int id ; id = id ; }
+do { float id ; id = id + id * id ; float id ; id = id + id * id ; } while ( true ) ;

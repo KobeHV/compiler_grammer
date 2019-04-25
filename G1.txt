@@ -1,12 +1,4 @@
 ^ -> S
-S -> S D
-S -> S A
-S -> S C
-S -> S L
-S -> D
-S -> A
-S -> C
-S -> L
 D -> P id ;
 D -> bool boolid ;
 P -> int
@@ -14,11 +6,11 @@ P -> float
 A -> id = E ;
 E -> T + E
 E -> T
-T -> num * T
+T -> N * T
 T -> id * T
 T -> ( E ) * T
 T -> ( E )
-T -> num
+T -> N
 T -> id
 C -> if ( B ) then { S } else { S }
 L -> do { S } while ( B ) ;
@@ -31,3 +23,17 @@ B -> true
 B -> false
 R -> ==
 R -> !=
+R -> >=
+R -> <=
+R -> >
+R -> <
+S -> S D
+S -> S A
+S -> S C
+S -> S L
+S -> D
+S -> A
+S -> C
+S -> L
+N -> iConst
+N -> fConst
