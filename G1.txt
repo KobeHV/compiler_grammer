@@ -1,4 +1,12 @@
 ^ -> S
+S -> S D
+S -> S A
+S -> S C
+S -> S L
+S -> D
+S -> A
+S -> C
+S -> L
 D -> P id ;
 D -> bool boolid ;
 P -> int
@@ -23,11 +31,3 @@ B -> true
 B -> false
 R -> ==
 R -> !=
-S -> S D
-S -> S A
-S -> S C
-S -> S L
-S -> D
-S -> A
-S -> C
-S -> L

@@ -1,6 +1,6 @@
 //
 // Created by kobe on 2019/4/19.
-//珍爱生命，请原理c++14
+//珍爱生命，请远离c++14
 //
 
 #include "LR1.h"
@@ -10,13 +10,17 @@ string LR::actionStatStr[] = {
         "s",
         "r"
 };
-//string strVn[] = {"^", "S", "P", "E", "T", "B", "R", "D", "A", "C", "L"};
-//string strVt[] = {"id", "boolid", "int", "float", "bool", "=", "+", "*",
-//                  "(", ")", "num", "if", "then", "else", "{", "}", "do",
-//                  "while", ";", "!", "&&", "||", "true", "false", "==", "!="};
-string strVn[] = {"^", "S", "C"};
-string strVt[] = {"c", "d", "#"};
-string str_all[] = {"^", "S", "C", "c", "d", "#"};
+string strVn[] = {"^", "S", "P", "E", "T", "B", "R", "D", "A", "C", "L"};
+string strVt[] = {"#", "id", "boolid", "int", "float", "bool", "=", "+", "*",
+                  "(", ")", "num", "if", "then", "else", "{", "}", "do",
+                  "while", ";", "!", "&&", "||", "true", "false", "==", "!="};
+string str_all[] = {"#", "^", "S", "P", "E", "T", "B", "R", "D", "A", "C", "L",
+                    "id", "boolid", "int", "float", "bool", "=", "+", "*",
+                    "(", ")", "num", "if", "then", "else", "{", "}", "do",
+                    "while", ";", "!", "&&", "||", "true", "false", "==", "!="};
+//string strVn[] = {"^", "S", "C"};
+//string strVt[] = {"c", "d", "#"};
+//string str_all[] = {"^", "S", "C", "c", "d", "#"};
 
 void _split(string &s, char delim, vector<string> &elems) {
     stringstream ss(s);
@@ -45,8 +49,7 @@ bool isVt(string &str) {
 }
 
 bool isVn(string &str) {
-//    int len = strVt->length();
-    int len = sizeof(strVt) / sizeof(strVt[0]);
+    int len = sizeof(strVn) / sizeof(strVn[0]);
     for (int i = 0; i < len; i++) {
         if (str == strVn[i]) {
             return true;
@@ -58,16 +61,17 @@ bool isVn(string &str) {
 string Prod::all_str() {
     string str = noTerminal;
     str += " ->";
-    for(int i=0;i<right.size();i++){
-        str+=" "+right[i];
+    for (int i = 0; i < right.size(); i++) {
+        str += " " + right[i];
     }
     set<string>::iterator iter;
-    for(iter=additionalVt.begin();
-        iter!=additionalVt.end();iter++){
-        str += " , "+*iter;
+    for (iter = additionalVt.begin();
+         iter != additionalVt.end(); iter++) {
+        str += " , " + *iter;
     }
     return str;
 }
+
 Prod::Prod(string &in) {
     if (in.size() == 0) return;
     string str;
@@ -103,7 +107,7 @@ void Item::add(Prod &p) {
 }
 
 void LR::addG() { //加载文法
-    fstream file("C:\\Code\\C\\clion\\LR1\\G.txt", ios::in|ios::out);
+    fstream file("C:\\Code\\C\\clion\\LR1\\G1.txt", ios::in | ios::out);
     string str;
     file >> noskipws;//not ignore space
     if (!file.is_open()) {
@@ -200,10 +204,14 @@ Item LR::closure(Item &I) {
                              it != prod.additionalVt.end(); it++) {
                             string str_first = beta + *it;//first(βa)
                             set<string> first1 = LR::first(str_first);
-                            first.insert(first1.begin(),first1.end());
+                            first.insert(first1.begin(), first1.end());
                         }
                         p.additionalVt = first;
-                        I.prods.push_back(p);
+                        //判断一下有重复的就不要加了
+                        auto it = find(I.prods.begin(), I.prods.end(), p);
+                        if (it == I.prods.end()) { // 不在I中
+                            I.prods.push_back(p);
+                        }
                     }
                 }
             }
@@ -245,8 +253,8 @@ void LR::items() {// 加载项目集
     for (int i = 0; i < C.size(); ++i) { // C的每个项目集
         int len1 = C.size();
         Item I = C[i];
-        int len = sizeof(str_all)/ sizeof(str_all[0]);
-        for (int j=0;j<len;j++) {
+        int len = sizeof(str_all) / sizeof(str_all[0]);
+        for (int j = 0; j < len; j++) {
             string X = str_all[j];
             Item next = Goto(I, X);
             if (next.prods.size() != 0) { // 不为空
@@ -257,7 +265,6 @@ void LR::items() {// 加载项目集
             }
         }
     }
-    return;
 }
 
 void LR::build() { // 构造Action、GOTO表
@@ -267,13 +274,13 @@ void LR::build() { // 构造Action、GOTO表
     for (int i = 0; i < C.size(); ++i) { // 逐个项目集
         Item item = C[i];
         //GOTO
-        int length = sizeof(str_all)/ sizeof(str_all[0]);
+        int length = sizeof(str_all) / sizeof(str_all[0]);
         for (int j = 0; j < length; j++) {
-            Item goto_item = Goto(item,str_all[j]);
+            Item goto_item = Goto(item, str_all[j]);
             string X = str_all[j];
-            for(int m=0;m<C.size();m++){
-                if(goto_item==C[m]){
-                    GOTO[make_pair(i,str_all[j])] = m;
+            for (int m = 0; m < C.size(); m++) {
+                if (goto_item == C[m]) {
+                    GOTO[make_pair(i, str_all[j])] = m;
                     break;
                 }
             }
@@ -325,7 +332,6 @@ set<string> LR::first(string &str) { // s不为产生式
 
     if (s.size() == 0)
         return set_first;
-    bool b = isVt(s[0]);
     if (isVt(s[0])) {
         set_first.insert(s[0]);
     } else {
@@ -333,7 +339,7 @@ set<string> LR::first(string &str) { // s不为产生式
             Prod p = G.prods[i];
             if (p.noTerminal == s[0]) {
                 string X = p.right[0];
-                if (isVn(X)) {
+                if (isVt(X)) {
                     set_first.insert(X);
                 } else {
                     set<string> f1 = first(X);
@@ -352,6 +358,7 @@ void LR::printTable() {
     cout << "print..." << endl;
     map<pair<int, string>, pair<actionStat, int> >::iterator iter;
     iter = ACTION.begin();
+    cout << "****************************************" << endl;
     cout << "ACTION[ <i,X> , <enum,j> ]" << endl;
     while (iter != ACTION.end()) {
         cout << "[ <" << iter->first.first << "," << iter->first.second << "> , <"
@@ -360,13 +367,16 @@ void LR::printTable() {
     }
     map<pair<int, string>, int>::iterator iter2;
     iter2 = GOTO.begin();
+    cout << endl << "****************************************" << endl;
     cout << "GOTO[<i,X> , j]" << endl;
     while (iter2 != GOTO.end()) {
-        cout << "[ <" << iter2->first.first << "," << iter2->first.second << "> , "
-             << iter2->second << " ]" << endl;
+        string str = iter2->first.second;
+        if (isVn(str)) {//注意 isVn("xx")就不对，必须先声明一个string再传进去,GOTO表的原意只有针对Vn，所以这里只打印Vn
+            cout << "[ <" << iter2->first.first << "," << iter2->first.second << "> , "
+                 << iter2->second << " ]" << endl;
+        }
         iter2++;
     }
-    return;
 }
 
 void LR::printC() {
