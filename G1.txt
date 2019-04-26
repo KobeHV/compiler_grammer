@@ -1,39 +1,39 @@
-^ -> S
-D -> P id ;
-D -> bool boolid ;
-P -> int
-P -> float
-A -> id = E ;
+S' -> states
+dec -> Type id ;
+dec -> bool boolid ;
+Type -> int
+Type -> float
+ass -> id = E ;
 E -> T + E
 E -> T
-T -> N * T
+T -> num * T
 T -> id * T
 T -> ( E ) * T
 T -> ( E )
-T -> N
+T -> num
 T -> id
-C -> if ( B ) then { S } else { S }
-L -> do { S } while ( B ) ;
-B -> E R E
+cond -> if ( B ) then { states } else { states }
+loop -> do { states } while ( B ) ;
+B -> E rop E
 B -> ! B
-B -> E R E && B
-B -> E R E || B
+B -> E rop E && B
+B -> E rop E || B
 B -> boolid
 B -> true
 B -> false
-R -> ==
-R -> !=
-R -> >=
-R -> <=
-R -> >
-R -> <
-S -> S D
-S -> S A
-S -> S C
-S -> S L
-S -> D
-S -> A
-S -> C
-S -> L
-N -> iConst
-N -> fConst
+rop -> ==
+rop -> !=
+rop -> >=
+rop -> <=
+rop -> >
+rop -> <
+states -> states dec
+states -> states ass
+states -> states cond
+states -> states loop
+states -> dec
+states -> ass
+states -> cond
+states -> loop
+num -> iConst
+num -> fConst

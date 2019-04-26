@@ -10,15 +10,23 @@ string LR::actionStatStr[] = {
         "s",
         "r"
 };
-string strVn[] = {"^", "S", "P", "E", "T", "B", "R", "D", "A", "C", "L", "N"};
-string strVt[] = {"#", "id", "boolid", "int", "float", "bool", "=", "+", "*",
-                  "(", ")", "if", "then", "else", "{", "}", "do",
-                  "while", ";", "!", "&&", "||", "true", "false",
+//string strVn[] = {"^", "states", "P", "E", "T", "B", "R", "D", "A", "C", "L", "N"};
+//string strVt[] = {"#", "id", "boolid", "int", "float", "bool", "=", "+", "*",
+//                  "(", ")", "if", "then", "else", "{", "}", "do",
+//                  "while", ";", "!", "&&", "||", "true", "false",
+//                  "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
+//string str_all[] = {"^", "states", "P", "E", "T", "B", "R", "D", "A", "C", "L", "N",
+//                    "#", "id", "boolid", "int", "float", "bool", "=", "+", "*",
+//                    "(", ")", "if", "then", "else", "{", "}", "do",
+//                    "while", ";", "!", "&&", "||", "true", "false",
+//                    "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
+string strVn[] = {"S'", "states", "Type", "E", "T", "B", "rop", "dec", "ass", "cond", "loop", "num"};
+string strVt[] = {"#", "id", "boolid", "int", "float", "bool", "=", "+", "*", "(", ")",
+                  "if", "then", "else", "{", "}", "do", "while", ";", "!", "&&", "||", "true", "false",
                   "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
-string str_all[] = {"^", "S", "P", "E", "T", "B", "R", "D", "A", "C", "L", "N",
-                    "#", "id", "boolid", "int", "float", "bool", "=", "+", "*",
-                    "(", ")", "if", "then", "else", "{", "}", "do",
-                    "while", ";", "!", "&&", "||", "true", "false",
+string str_all[] = {"S'", "states", "Type", "E", "T", "B", "rop", "dec", "ass", "cond", "loop", "num",
+                    "#", "id", "boolid", "int", "float", "bool", "=", "+", "*", "(", ")",
+                    "if", "then", "else", "{", "}", "do", "while", ";", "!", "&&", "||", "true", "false",
                     "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
 //string strVn[] = {"^", "S", "C"};
 //string strVt[] = {"c", "d", "#"};
@@ -89,7 +97,7 @@ Prod::Prod(string &in) {
 
 void Item::add(string &prod) {
     Prod p = Prod(prod);
-    if (p.noTerminal == "^") {
+    if (p.noTerminal == "S'") {
         p.additionalVt.insert("#");
     }
     vector<Prod>::iterator it = find(prods.begin(), prods.end(), p);
@@ -117,7 +125,7 @@ void LR::addG() { //加载文法
     }
     while (!file.eof()) {
         getline(file, str);
-//        cout << str << endl;
+        cout << str << endl;
         G.add(str);
     }
     file.close();
@@ -223,7 +231,7 @@ Item LR::closure(Item &I) {
 Item LR::Goto(Item &I, string X) {
 //    cout << "Goto..." << endl;
     Item J;
-    if (I.prods.size() == 0 || X == "") return J; // 项目集为空则返回空项目
+    if (I.prods.size() == 0) return J; // 项目集为空则返回空项目
 
     for (int i = 0; i < I.prods.size(); ++i) { // 枚举I的产生式
         Prod prod = I.prods[i];
@@ -242,7 +250,7 @@ Item LR::Goto(Item &I, string X) {
 void LR::items() {// 加载项目集
     cout << "items..." << endl;
     Item initial;
-    string str0 = "^ -> . S";//C[0]
+    string str0 = "S' -> . states";//C[0]
     Prod p = Prod(str0);
     p.additionalVt.insert("#");
     initial.prods.push_back(p);
@@ -298,7 +306,7 @@ void LR::build() { // 构造Action、GOTO表
                         ACTION[make_pair(i, a)] = make_pair(SHIFT, goto_index);
                     }
                 } else if (prod.right[j] == "." && j == prod.right.size() - 1
-                           && prod.noTerminal != "^") {//A->α.,a
+                           && prod.noTerminal != "S'") {//A->α.,a
                     prod.right.erase(prod.right.end());//去掉最后的 . ,否则在后边的G文法项目比较的时候找不到相等的
                     vector<Prod> g_prods = G.prods;
                     for (set<string>::iterator it = prod.additionalVt.begin();
@@ -313,7 +321,7 @@ void LR::build() { // 构造Action、GOTO表
                         }
                     }
                 } else if (prod.right[j] == "." && j == prod.right.size() - 1
-                           && prod.noTerminal == "^") {//A->α.,a
+                           && prod.noTerminal == "S'") {//A->α.,a
                     ACTION[make_pair(i, "#")] = make_pair(ACCEPT, -1);
                 }
             }
@@ -409,12 +417,14 @@ void LR::run(fstream &file) {
 
     LR::addG();
     LR::build();
+
+    LR::printTable();
+    LR::printC();
+
     for (int i = 0; i < in.size(); i++) {
         LR::loadStr(in[i]);
         LR::parser(in[i]);
     }
-//    LR::printTable();
-//    LR::printC();
 }
 
 
