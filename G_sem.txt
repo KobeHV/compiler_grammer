@@ -1,0 +1,39 @@
+S' -> states {s_act}
+dec -> Type id ; {dec_act}
+Type -> int {type_act_int}
+Type -> float {type_act_float}
+ass -> id = E ; {ass_act}
+E -> E + T {add_act}
+E -> T {transfer_attr_act}
+T -> num * T {mul_act_num}
+T -> id * T {mul_act_var}
+T -> T * ( E ) {mul_act_unit}
+T -> ( E ) {unit_act}
+T -> num {num_act}
+T -> id {var_act}
+cond -> if ( B ) then { states } else { states } {cond_act}
+loop -> do { states } while ( B ) ; {loop_dw_act}
+loop -> for ( B ) { states }
+loop -> while ( B ) { states }
+B -> E rop E {rop_act}
+B -> ! B {not_act}
+B -> E rop E && B {rop_band_act}
+B -> E rop E || B {rop_bor_act}
+B -> true {true_act}
+B -> false {false_act}
+rop -> == {equ_act}
+rop -> != {neq_act}
+rop -> >= {ge_act}
+rop -> <= {le_act}
+rop -> > {g_act}
+rop -> < {l_act}
+states -> states {count_instr} dec {states_dec_act}
+states -> states {count_instr} ass {states_ass_act}
+states -> states {count_instr} cond {states_cond_act}
+states -> states {count_instr} loop {states_loop_act}
+states -> dec {states_sg_dec_act}
+states -> {count_sg_instr} ass {states_sg_ass_act}
+states -> {count_sg_instr} cond {states_sg_cond_act}
+states -> {count_sg_instr} loop {states_sg_loop_act}
+num -> iConst {const_act}
+num -> fConst {const_act}

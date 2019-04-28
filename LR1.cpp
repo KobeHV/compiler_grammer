@@ -10,16 +10,8 @@ string LR::actionStatStr[] = {
         "s",
         "r"
 };
-//string strVn[] = {"^", "states", "P", "E", "T", "B", "R", "D", "A", "C", "L", "N"};
-//string strVt[] = {"#", "id", "boolid", "int", "float", "bool", "=", "+", "*",
-//                  "(", ")", "if", "then", "else", "{", "}", "do",
-//                  "while", ";", "!", "&&", "||", "true", "false",
-//                  "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
-//string str_all[] = {"^", "states", "P", "E", "T", "B", "R", "D", "A", "C", "L", "N",
-//                    "#", "id", "boolid", "int", "float", "bool", "=", "+", "*",
-//                    "(", ")", "if", "then", "else", "{", "}", "do",
-//                    "while", ";", "!", "&&", "||", "true", "false",
-//                    "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
+
+//G1
 string strVn[] = {"S'", "states", "Type", "E", "T", "B", "rop", "dec", "ass", "cond", "loop", "num"};
 string strVt[] = {"#", "id", "boolid", "int", "float", "bool", "=", "+", "*", "(", ")",
                   "if", "then", "else", "{", "}", "do", "while", ";", "!", "&&", "||", "true", "false",
@@ -28,9 +20,18 @@ string str_all[] = {"S'", "states", "Type", "E", "T", "B", "rop", "dec", "ass", 
                     "#", "id", "boolid", "int", "float", "bool", "=", "+", "*", "(", ")",
                     "if", "then", "else", "{", "}", "do", "while", ";", "!", "&&", "||", "true", "false",
                     "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
-//string strVn[] = {"^", "S", "C"};
-//string strVt[] = {"c", "d", "#"};
-//string str_all[] = {"^", "S", "C", "c", "d", "#"};
+
+//G2
+//string strVn[] = {"S'", "states", "Type", "ArrayDec", "E", "T", "B", "rop", "dec", "ass",
+//                  "cond", "loop", "num", "func", "args"};
+//string strVt[] = {"#", "id", "for", "[", "]", "int", "float", "bool", "=", "+", "*", "(", ")",
+//                  "if", "then", "else", "{", "}", "do", "while", ";", "!", "&&", "||", "true", "false",
+//                  "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
+//string str_all[] = {"S'", "states", "Type", "ArrayDec", "E", "T", "B", "rop", "dec", "ass",
+//                    "cond", "loop", "num", "func", "args",
+//                    "#", "id", "for", "[", "]", "int", "float", "bool", "=", "+", "*", "(", ")",
+//                    "if", "then", "else", "{", "}", "do", "while", ";", "!", "&&", "||", "true", "false",
+//                    "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
 
 void _split(string &s, char delim, vector<string> &elems) {
     stringstream ss(s);
@@ -117,6 +118,8 @@ void Item::add(Prod &p) {
 
 void LR::addG() { //加载文法
     fstream file("C:\\Code\\C\\clion\\LR1\\G1.txt", ios::in | ios::out);
+//    fstream file("C:\\Code\\C\\clion\\LR1\\G2.txt", ios::in | ios::out);
+//    fstream file("C:\\Code\\C\\clion\\LR1\\G_sem.txt", ios::in | ios::out);
     string str;
     file >> noskipws;//not ignore space
     if (!file.is_open()) {
@@ -125,10 +128,11 @@ void LR::addG() { //加载文法
     }
     while (!file.eof()) {
         getline(file, str);
-        cout << str << endl;
+//        cout << str << endl;
         G.add(str);
     }
     file.close();
+
 }
 
 void LR::loadStr(string &in) {
@@ -141,14 +145,14 @@ void LR::loadStr(string &in) {
     }
 }
 
-void LR::parser(string &str) {
+Node *LR::parser(string &str) {
     cout << endl << "************parse..." << str << "*************" << endl;
 
     bool success = false;
+    vector<Node *> node_vec;
     int step = 0;
     while (!success) {
         cout << "step:" << step << endl;
-
         int sTop = status.size() - 1; // 栈顶
         int iTop = inStr.size() - 1;
         pair<int, string> p = make_pair(status[sTop], inStr[iTop]);
@@ -157,6 +161,8 @@ void LR::parser(string &str) {
         pair<actionStat, int> act = ACTION[p];
         if (act.first == SHIFT) { // 移进
             cout << "SHIFT" << endl;
+            node_vec.push_back(new Node(inStr[iTop]));
+
             status.push_back(act.second);
             parse.push_back(inStr[iTop]);
             inStr.pop_back();
@@ -164,12 +170,23 @@ void LR::parser(string &str) {
             Prod p = G.prods[act.second];//要规约的表达式
             string string1 = p.all_str();
             cout << "REDUCE: " + string1 << endl;
+            vector<Node *> childs;
+            for (int i = 0; i < p.right.size(); i++) {
+                childs.push_back(node_vec[i + node_vec.size() - p.right.size()]);
+            }
+
+
             if (p.right.size() != 0) { // 空串，无需出栈，直接规约
                 for (int i = 0; i < p.right.size(); i++) {
                     status.pop_back();
                     parse.pop_back();
+                    node_vec.pop_back();
                 }
             }
+            node_vec.push_back(new Node(p.noTerminal));
+            node_vec[node_vec.size() - 1]->childs = childs;
+
+
             parse.push_back(p.noTerminal);
             sTop = status.size() - 1; // 栈顶
             iTop = inStr.size() - 1;
@@ -185,6 +202,7 @@ void LR::parser(string &str) {
     if (!success) {
         cout << "parse error!" << endl;
     }
+    return node_vec[0];
 }
 
 Item LR::closure(Item &I) {
@@ -399,7 +417,7 @@ void LR::printC() {
     }
 }
 
-void LR::run(fstream &file) {
+Node *LR::run(fstream &file) {
     cout << "run..." << endl;
     vector<string> in;
     string str;
@@ -410,7 +428,7 @@ void LR::run(fstream &file) {
     }
     while (!file.eof()) {
         getline(file, str);
-        cout << str << endl;
+//        cout << str << endl;
         in.push_back(str);
     }
     file.close();
@@ -420,11 +438,10 @@ void LR::run(fstream &file) {
 
     LR::printTable();
     LR::printC();
-
-    for (int i = 0; i < in.size(); i++) {
-        LR::loadStr(in[i]);
-        LR::parser(in[i]);
-    }
+    LR::loadStr(in[0]);
+    Node *root = LR::parser(in[0]);
+    return root;
+//    return NULL;
 }
 
 

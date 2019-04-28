@@ -1,0 +1,41 @@
+S' -> states
+dec -> Type id ;
+Type -> int
+Type -> float
+ass -> id = E ;
+E -> E + T
+E -> T
+T -> num * T
+T -> id * T
+T -> ( E ) * T
+T -> ( E )
+T -> num
+T -> id
+cond -> if ( B ) then { states } else { states }
+loop -> do { states } while ( B ) ;
+B -> E rop E
+B -> ! B
+B -> E rop E && B
+B -> E rop E || B
+B -> boolid
+B -> true
+B -> false
+rop -> ==
+rop -> !=
+rop -> >=
+rop -> <=
+rop -> >
+rop -> <
+func -> Type id ( ) { states }
+states -> states dec
+states -> states ass
+states -> states cond
+states -> states loop
+states -> states func
+states -> dec
+states -> ass
+states -> cond
+states -> loop
+states -> func
+num -> iConst
+num -> fConst

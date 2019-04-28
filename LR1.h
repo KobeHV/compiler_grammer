@@ -17,11 +17,28 @@
 
 using namespace std;
 
+struct Node {
+    Node(string v_) {
+        V = v_;
+    }
+
+    ~Node() {
+        for (Node *p:childs)
+            free(p);
+    }
+
+    string V;
+    vector<Node *> childs;
+    map<string, string> attrs;
+};
+
 class Prod { // 这里是存放形如X->abc的形式，不存在多个候选式
 public:
     string noTerminal; // 产生式左部非终结符名字
     vector<string> right; // 产生式右部
     set<string> additionalVt; // 附加终结符
+    map<string, string> attrs;//语义分析的属性
+
     //重载 “==” 操作符，函数最后的 const 别忘了，否则会报错
     //如果vector中保存的是自定义类型（结构体/类），则需要为该类型重载==操作符。再用find
     bool operator==(const Prod &p) const {
@@ -88,11 +105,13 @@ public:
     void build(); // 构造Action、GOTO表
 
     void loadStr(string &in); // 读取输入串
-    void parser(string &string); // LR(1)分析
-    void run(fstream &file);
+    Node *parser(string &string); // LR(1)分析
+    Node *run(fstream &file);
 
     void printTable();
+
     void printC();
 };
+
 
 #endif //LR1_LR1_H

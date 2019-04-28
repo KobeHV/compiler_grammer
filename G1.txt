@@ -1,6 +1,5 @@
 S' -> states
 dec -> Type id ;
-dec -> bool boolid ;
 Type -> int
 Type -> float
 ass -> id = E ;
@@ -14,11 +13,12 @@ T -> num
 T -> id
 cond -> if ( B ) then { states } else { states }
 loop -> do { states } while ( B ) ;
+loop -> for ( B ) { states }
+loop -> while ( B ) { states }
 B -> E rop E
 B -> ! B
 B -> E rop E && B
 B -> E rop E || B
-B -> boolid
 B -> true
 B -> false
 rop -> ==

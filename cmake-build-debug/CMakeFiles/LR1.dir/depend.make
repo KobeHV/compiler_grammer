@@ -6,4 +6,5 @@ CMakeFiles/LR1.dir/LR1.cpp.obj: ../LR1.h
 
 CMakeFiles/LR1.dir/main.cpp.obj: ../LR1.h
 CMakeFiles/LR1.dir/main.cpp.obj: ../main.cpp
+CMakeFiles/LR1.dir/main.cpp.obj: ../semantic.cpp
 
