@@ -6,11 +6,10 @@
 
 int main() {
 
-    fstream file("C:\\Code\\C\\clion\\LR1\\test1.txt", ios::in);
+    fstream file("C:\\Code\\C\\clion\\LR1\\test.txt", ios::in);
     LR lr;
-    lr.run(file);
-//    Node *root = lr.run(file);
+    Node *root = lr.run(file);
     cout << "************ScanTree***********" << endl;
-//    scanTree(root);
+    scanTree(root);
     return 0;
 }

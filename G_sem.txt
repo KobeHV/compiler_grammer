@@ -3,11 +3,11 @@ dec -> Type id ; {dec_act}
 Type -> int {type_act_int}
 Type -> float {type_act_float}
 ass -> id = E ; {ass_act}
-E -> E + T {add_act}
+E -> T + E {add_act}
 E -> T {transfer_attr_act}
 T -> num * T {mul_act_num}
 T -> id * T {mul_act_var}
-T -> T * ( E ) {mul_act_unit}
+T -> ( E ) * T {mul_act_unit}
 T -> ( E ) {unit_act}
 T -> num {num_act}
 T -> id {var_act}
