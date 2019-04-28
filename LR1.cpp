@@ -79,6 +79,12 @@ string Prod::all_str() {
          iter != additionalVt.end(); iter++) {
         str += " , " + *iter;
     }
+    str += "   ***attrs: ";
+    map<string,string>::iterator iter2;
+    for(iter2=attrs.begin();iter2!=attrs.end();iter2++){
+        string string1 = iter2->first;
+        str += "  "+string1;
+    }
     return str;
 }
 
@@ -89,7 +95,14 @@ Prod::Prod(string &in) {
     noTerminal = s[0];
     if (s[1] == "->") {
         for (int i = 2; i < s.size(); i++) {
-            right.push_back(s[i]);
+            string str = s[i];
+            if (str.at(0) != '{' || (str.at(0) == '{' && str.size() == 1)) {
+                right.push_back(str);
+            } else if (s[i].at(0) == '{' && s[i].size() > 3) {
+                int len = s[i].size();
+                string str = s[i].substr(1, len - 2);
+                attrs.insert(pair<string, string>(str,"attrs"));
+            }
         }
     } else {
         cout << "Error : can't find ->" << endl;
@@ -117,9 +130,9 @@ void Item::add(Prod &p) {
 }
 
 void LR::addG() { //加载文法
-    fstream file("C:\\Code\\C\\clion\\LR1\\G1.txt", ios::in | ios::out);
+//    fstream file("C:\\Code\\C\\clion\\LR1\\G1.txt", ios::in | ios::out);
 //    fstream file("C:\\Code\\C\\clion\\LR1\\G2.txt", ios::in | ios::out);
-//    fstream file("C:\\Code\\C\\clion\\LR1\\G_sem.txt", ios::in | ios::out);
+    fstream file("C:\\Code\\C\\clion\\LR1\\G_sem.txt", ios::in | ios::out);
     string str;
     file >> noskipws;//not ignore space
     if (!file.is_open()) {
@@ -130,6 +143,9 @@ void LR::addG() { //加载文法
         getline(file, str);
 //        cout << str << endl;
         G.add(str);
+    }
+    for (int i = 0; i < G.prods.size(); i++) {
+        cout << G.prods[i].all_str() << endl;
     }
     file.close();
 
@@ -418,30 +434,30 @@ void LR::printC() {
 }
 
 Node *LR::run(fstream &file) {
-    cout << "run..." << endl;
-    vector<string> in;
-    string str;
-    file >> noskipws;//not ignore space
-    if (!file.is_open()) {
-        cout << "Could not find the file" << endl;
-        exit(EXIT_FAILURE);
-    }
-    while (!file.eof()) {
-        getline(file, str);
-//        cout << str << endl;
-        in.push_back(str);
-    }
-    file.close();
+//    cout << "run..." << endl;
+//    vector<string> in;
+//    string str;
+//    file >> noskipws;//not ignore space
+//    if (!file.is_open()) {
+//        cout << "Could not find the file" << endl;
+//        exit(EXIT_FAILURE);
+//    }
+//    while (!file.eof()) {
+//        getline(file, str);
+////        cout << str << endl;
+//        in.push_back(str);
+//    }
+//    file.close();
 
     LR::addG();
-    LR::build();
+//    LR::build();
 
-    LR::printTable();
-    LR::printC();
-    LR::loadStr(in[0]);
-    Node *root = LR::parser(in[0]);
-    return root;
-//    return NULL;
+//    LR::printTable();
+//    LR::printC();
+//    LR::loadStr(in[0]);
+//    Node *root = LR::parser(in[0]);
+//    return root;
+    return NULL;
 }
 
 

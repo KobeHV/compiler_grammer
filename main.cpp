@@ -8,8 +8,9 @@ int main() {
 
     fstream file("C:\\Code\\C\\clion\\LR1\\test1.txt", ios::in);
     LR lr;
-    Node *root = lr.run(file);
+    lr.run(file);
+//    Node *root = lr.run(file);
     cout << "************ScanTree***********" << endl;
-    scanTree(root);
+//    scanTree(root);
     return 0;
 }

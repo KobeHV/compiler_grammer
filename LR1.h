@@ -29,7 +29,7 @@ struct Node {
 
     string V;
     vector<Node *> childs;
-    map<string, string> attrs;
+    map<string, string> attr;
 };
 
 class Prod { // 这里是存放形如X->abc的形式，不存在多个候选式

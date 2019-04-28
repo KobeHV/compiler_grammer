@@ -13,8 +13,6 @@ T -> num {num_act}
 T -> id {var_act}
 cond -> if ( B ) then { states } else { states } {cond_act}
 loop -> do { states } while ( B ) ; {loop_dw_act}
-loop -> for ( B ) { states }
-loop -> while ( B ) { states }
 B -> E rop E {rop_act}
 B -> ! B {not_act}
 B -> E rop E && B {rop_band_act}
