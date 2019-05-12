@@ -89,6 +89,12 @@
 		<Unit filename="C:/Code/C/clion/LR1/main.cpp">
 			<Option target="LR1"/>
 		</Unit>
+		<Unit filename="C:/Code/C/clion/LR1/token.cpp">
+			<Option target="LR1"/>
+		</Unit>
+		<Unit filename="C:/Code/C/clion/LR1/token.h">
+			<Option target="LR1"/>
+		</Unit>
 		<Unit filename="C:/Code/C/clion/LR1/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

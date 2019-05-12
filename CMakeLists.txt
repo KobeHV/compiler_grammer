@@ -6,4 +6,4 @@ set(CMAKE_CXX_STANDARD 11)
 # 并将名称保存到 DIR_SRCS 变量
 aux_source_directory(. DIR_SRCS)
 # 指定生成目标
-add_executable(LR1 main.cpp ${DIR_SRCS})
+add_executable(LR1 main.cpp ${DIR_SRCS} token.h)

@@ -17,20 +17,7 @@
 
 using namespace std;
 
-struct Node {
-    Node(string v_) {
-        V = v_;
-    }
 
-    ~Node() {
-        for (Node *p:childs)
-            free(p);
-    }
-
-    string V;
-    vector<Node *> childs;
-    map<string, string> attr;
-};
 
 class Prod { // 这里是存放形如X->abc的形式，不存在多个候选式
 public:
@@ -61,7 +48,26 @@ public:
 
     Prod(string &in);
 
+    Prod();
+
     string all_str();
+};
+
+struct Node {
+    Node(string v_) {
+        V = v_;
+    }
+
+    ~Node() {
+        for (Node *p:childs)
+            free(p);
+    }
+
+    string V;
+    Prod prod;
+    vector<Node *> childs;
+    map<string, string> attr;
+
 };
 
 class Item { // 项目集,代表某一个状态
@@ -91,7 +97,6 @@ public:
     vector<Item> C; // 项目集规范族
     map<pair<int, string>, int> GOTO; // goto数组，项目集<int, int>=char
     map<pair<int, string>, pair<actionStat, int> > ACTION; // Action数组，Action[(i, a)]=(s|r)j
-    map<string, set<string> > FIRST; // first集
     set<string> first(string &str); // 求first集
     vector<string> inStr; // 输入串/栈
     vector<int> status; // 状态栈

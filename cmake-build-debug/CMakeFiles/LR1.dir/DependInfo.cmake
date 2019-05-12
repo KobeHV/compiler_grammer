@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "C:/Code/C/clion/LR1/LR1.cpp" "C:/Code/C/clion/LR1/cmake-build-debug/CMakeFiles/LR1.dir/LR1.cpp.obj"
   "C:/Code/C/clion/LR1/main.cpp" "C:/Code/C/clion/LR1/cmake-build-debug/CMakeFiles/LR1.dir/main.cpp.obj"
+  "C:/Code/C/clion/LR1/token.cpp" "C:/Code/C/clion/LR1/cmake-build-debug/CMakeFiles/LR1.dir/token.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

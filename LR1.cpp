@@ -21,19 +21,6 @@ string str_all[] = {"S'", "states", "Type", "E", "T", "B", "rop", "dec", "ass", 
                     "#", "id", "boolid", "int", "float", "bool", "=", "+", "*", "(", ")",
                     "if", "then", "else", "{", "}", "do", "while", ";", "!", "&&", "||", "true", "false",
                     "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
-
-//G2
-//string strVn[] = {"S'", "states", "Type", "ArrayDec", "E", "T", "B", "rop", "dec", "ass",
-//                  "cond", "loop", "num", "func", "args"};
-//string strVt[] = {"#", "id", "for", "[", "]", "int", "float", "bool", "=", "+", "*", "(", ")",
-//                  "if", "then", "else", "{", "}", "do", "while", ";", "!", "&&", "||", "true", "false",
-//                  "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
-//string str_all[] = {"S'", "states", "Type", "ArrayDec", "E", "T", "B", "rop", "dec", "ass",
-//                    "cond", "loop", "num", "func", "args",
-//                    "#", "id", "for", "[", "]", "int", "float", "bool", "=", "+", "*", "(", ")",
-//                    "if", "then", "else", "{", "}", "do", "while", ";", "!", "&&", "||", "true", "false",
-//                    "==", "!=", ">=", "<=", ">", "<", "iConst", "fConst"};
-
 void _split(string &s, char delim, vector<string> &elems) {
     stringstream ss(s);
     string item;
@@ -80,12 +67,12 @@ string Prod::all_str() {
          iter != additionalVt.end(); iter++) {
         str += " , " + *iter;
     }
-    str += "   ***attrs: ";
-    map<string, string>::iterator iter2;
-    for (iter2 = attrs.begin(); iter2 != attrs.end(); iter2++) {
-        string string1 = iter2->first;
-        str += "  " + string1;
-    }
+//    str += "   ***attrs: ";
+////    map<string, string>::iterator iter2;
+////    for (iter2 = attrs.begin(); iter2 != attrs.end(); iter2++) {
+////        string string1 = iter2->first;
+////        str += "  " + string1;
+////    }
     return str;
 }
 
@@ -109,6 +96,8 @@ Prod::Prod(string &in) {
         cout << "Error : can't find ->" << endl;
     }
 }
+
+Prod::Prod() {}
 
 void Item::add(string &prod) {
     Prod p = Prod(prod);
@@ -142,11 +131,7 @@ void LR::addG() { //加载文法
     }
     while (!file.eof()) {
         getline(file, str);
-//        cout << str << endl;
         G.add(str);
-    }
-    for (int i = 0; i < G.prods.size(); i++) {
-        cout << G.prods[i].all_str() << endl;
     }
     file.close();
 
@@ -200,7 +185,9 @@ Node *LR::parser(string &str) {
                     node_vec.pop_back();
                 }
             }
-            node_vec.push_back(new Node(p.noTerminal));
+            Node *father = new Node(p.noTerminal);
+            father->prod = p;
+            node_vec.push_back(father);
             node_vec[node_vec.size() - 1]->childs = childs;
 
 
@@ -435,6 +422,15 @@ void LR::printC() {
     }
 }
 
+void scanTree(Node *root) {
+    cout << root->V <<endl;
+    if(root->childs.size() == 0){
+        return;
+    }
+    for(Node *p : root->childs){
+        scanTree(p);
+    }
+}
 Node *LR::run(fstream &file) {
     cout << "run..." << endl;
     vector<string> in;
@@ -458,6 +454,7 @@ Node *LR::run(fstream &file) {
     LR::printC();
     LR::loadStr(in[0]);
     Node *root = LR::parser(in[0]);
+    //scanTree(root);
     return root;
 //    return NULL;
 }

@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-C:/Code/C/clion/LR1/LR1.cpp
-LR1.h
-C:/Code/C/clion/LR1/LR1.h
-
 C:/Code/C/clion/LR1/LR1.h
 iostream
 -
@@ -28,5 +24,31 @@ map
 set
 -
 sstream
+-
+
+C:/Code/C/clion/LR1/main.cpp
+LR1.h
+C:/Code/C/clion/LR1/LR1.h
+token.h
+C:/Code/C/clion/LR1/token.h
+
+C:/Code/C/clion/LR1/token.cpp
+token.h
+C:/Code/C/clion/LR1/token.h
+
+C:/Code/C/clion/LR1/token.h
+fstream
+-
+iostream
+-
+string
+-
+fstream
+-
+map
+-
+algorithm
+-
+vector
 -
 
